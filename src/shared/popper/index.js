@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Box,
   Button,
@@ -6,8 +6,8 @@ import {
   Paper,
   Popper,
   Typography,
-} from '@material-ui/core';
-import './index.css';
+} from "@material-ui/core";
+import "./index.css";
 
 const CustomPopper = ({ anchorEl, setAnchorEl, handleChange, id, title }) => {
   return (
@@ -15,32 +15,31 @@ const CustomPopper = ({ anchorEl, setAnchorEl, handleChange, id, title }) => {
       id={id.toString()}
       open={anchorEl}
       anchorEl={anchorEl}
-      placement='left'
-      style={{ zIndex: 9 }}
+      placement="left"
+      className="popper"
     >
-      <Paper className='paper'>
-        <Box className='arrow'/>
-        <Box p={3} display='flex' flexDirection='column' mt={3}>
+      <Paper className="paper">
+        <Box className="arrow"/>
+        <Box p={3} className="content" mt={3}>
           <Box mb={2}>
-            <Typography className='title-modal'>
+            <Typography className="title-popper">
               Confirmar solicitação
             </Typography>
             <Divider />
           </Box>
-
           <Typography>{title}</Typography>
-          <Box display='flex' justifyContent='space-evenly' mt={2}>
+          <Box className="buttons" mt={2}>
             <Button
-              variant='contained'
-              className='button-negation'
+              variant="contained"
+              className="button-negation"
               onClick={() => setAnchorEl(null)}
             >
               Não
             </Button>
             <Box ml={1}>
               <Button
-                variant='contained'
-                className='button-accept'
+                variant="contained"
+                className="button-accept"
                 onClick={() => handleChange(id)}
               >
                 Sim

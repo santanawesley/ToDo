@@ -1,8 +1,8 @@
-import React from 'react';
-import './index.css';
+import React from "react";
+import "./index.css";
 
 const loading = () => {
-  return <div className='c-loader'></div>
+  return <div className="c-loader"></div>
 };
 
 export default loading;

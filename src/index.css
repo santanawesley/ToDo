@@ -55,6 +55,16 @@ tr:nth-child(even) {
 .column-description {
   width: 400px;
 }
+@media screen and (max-width: 600px) {
+  body {
+    background-color: olive;
+  }
+}
+@media screen and (max-width: 800px) {
+  .column-description {
+    width: 200px;
+  }
+}
 
 .column-add {
   width: 140px;
@@ -108,11 +118,10 @@ tr:nth-child(even) {
   left: 0;
   background: rgba(0,0,0,0.8);
   z-index: 2;
-  opacity:0;
   -webkit-transition: opacity 400ms ease-in;
   -moz-transition: opacity 400ms ease-in;
   transition: opacity 400ms ease-in;
-  pointer-events: none;
+  color: #fff;
 }
 
 .modal:target {
@@ -126,7 +135,7 @@ tr:nth-child(even) {
   margin: 10% auto;
   padding: 15px 20px;
   border-radius: 16px;
-  background: green;
+  background: gray;
 }
 
 .close {
@@ -137,10 +146,12 @@ tr:nth-child(even) {
   text-align: center;
   line-height: 30px;
   margin-top: 5px;
-  background: #ff4545;
-  border-radius: 50%;
+  cursor: pointer;
   font-size: 16px;
-  color: #8d0000;
+}
+
+.title-modal {
+  text-align: center;
 }
 
 .button-submit {
@@ -154,4 +165,14 @@ tr:nth-child(even) {
   padding: 4px 8px;
   border-radius: 13px;
   font-weight: bold;
+}
+
+.list-empty {
+  text-align: center;
+  padding: 30px 0;
+}
+
+.error-get-list {
+  text-align: center;
+  padding: 30px 0;
 }

@@ -13,6 +13,18 @@ export const api = {
       });
   },
 
+  listSpecificTasks: async (id) => {
+    return await fetch(`${url}/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "aplication/json",
+      },
+    })
+      .then((resp) => {
+        return resp.json();
+      });
+  },
+
   registerTasks: async (name) => {
     const json = JSON.stringify({ name });
     return await fetch(url, {

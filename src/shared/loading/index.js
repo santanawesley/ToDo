@@ -1,5 +1,5 @@
 import React from "react";
-import "./index.css";
+import "./styles.css";
 
 const loading = () => {
   return <div className="c-loader"></div>

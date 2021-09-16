@@ -39,7 +39,6 @@ tr:nth-child(even) {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
 }
 
 .icon {
@@ -55,11 +54,13 @@ tr:nth-child(even) {
 .column-description {
   width: 400px;
 }
+
 @media screen and (max-width: 600px) {
   body {
     background-color: olive;
   }
 }
+
 @media screen and (max-width: 800px) {
   .column-description {
     width: 200px;
@@ -108,63 +109,6 @@ tr:nth-child(even) {
 .title-status {
   display: flex;
   justify-content: space-between;
-}
-
-.modal {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background: rgba(0,0,0,0.8);
-  z-index: 2;
-  -webkit-transition: opacity 400ms ease-in;
-  -moz-transition: opacity 400ms ease-in;
-  transition: opacity 400ms ease-in;
-  color: #fff;
-}
-
-.modal:target {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.modal > div {
-  width: 400px;
-  position: relative;
-  margin: 10% auto;
-  padding: 15px 20px;
-  border-radius: 16px;
-  background: gray;
-}
-
-.close {
-  position: absolute;
-  width: 30px;
-  right: 10px;
-  top: 5px;
-  text-align: center;
-  line-height: 30px;
-  margin-top: 5px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.title-modal {
-  text-align: center;
-}
-
-.button-submit {
-  text-align: center;
-  margin-top: 32px;
-}
-
-.button-submit > input {
-  background-color: #7FFFD4;
-  border-color: #7FFFD4;
-  padding: 4px 8px;
-  border-radius: 13px;
-  font-weight: bold;
 }
 
 .list-empty {

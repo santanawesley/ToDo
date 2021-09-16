@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from 'react-router';
+import { useMediaQuery, useTheme } from '@material-ui/core';
+import api from "../../main/api";
 import {
   Icon_add,
   Icon_checked,
@@ -6,20 +9,22 @@ import {
   Icon_edit,
   Icon_order,
   Icon_unchecked,
-} from "./assets/icons";
-import { Loading, Modal, Popper, ShowToast } from "./shared";
-import "./index.css";
-import api from "./api";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+} from "../../assets/icons";
+import { Loading, Modal, Popper, ShowToast } from "../../shared";
+import { maskDate } from '../../shared/masks';
+import "./styles.css";
 
 const App = () => {
+  const history = useHistory();
+
   const [loading, setLoading] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [titlePopper, setTitlePopper] = useState("");
   const [data, setData] = useState([]);
   const [orderActivity, setOrderActivity] = useState(true);
   const [orderStatus, setOrderStatus] = useState(true);
+  const [orderInclusion, setOrderInclusion] = useState(true);
+  const [orderChange, setOrderChange] = useState(true);
   const [taskId, setTaskId] = useState();
   const [error, setError] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -52,6 +57,8 @@ const App = () => {
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popper" : undefined;
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleAction = async () => {
     setAnchorEl(null);
@@ -116,17 +123,6 @@ const App = () => {
     setShowModal(true);
   };
 
-  const handleEdit = (id, name, completed) => {
-    setDataModal({
-      type: "edit",
-      title: "Editar tarefa",
-      name,
-      completed,
-      id,
-    });
-    setShowModal(true);
-  };
-
   const handleDelete = (event, taskId) => {
     setTaskId(taskId);
     setTitlePopper("Deseja excluir a atividade?");
@@ -136,6 +132,8 @@ const App = () => {
   const order = (type) => {
     setOrderActivity(!orderActivity);
     setOrderStatus(!orderStatus);
+    setOrderInclusion(!orderInclusion);
+    setOrderChange(!orderChange);
 
     const orderedData = data.sort((a, b) => {
       if (type === "activity") {
@@ -146,7 +144,7 @@ const App = () => {
           return orderActivity ? -1 : 1;
         }
         return 0;
-      } else {
+      } if(type === "status") {
         if (a.completed > b.completed) {
           return orderStatus ? 1 : -1;
         }
@@ -154,7 +152,23 @@ const App = () => {
           return orderStatus ? -1 : 1;
         }
         return 0;
+      } if(type === "inclusion") {
+        if (a.inserted_at > b.inserted_at) {
+          return orderStatus ? 1 : -1;
+        }
+        if (a.inserted_at < b.inserted_at) {
+          return orderStatus ? -1 : 1;
+        }
+        return 0;
+    } else {
+      if (a.updated_at > b.updated_at) {
+        return orderStatus ? 1 : -1;
       }
+      if (a.updated_at < b.updated_at) {
+        return orderStatus ? -1 : 1;
+      }
+      return 0;
+    }
     });
     setData(orderedData);
   };
@@ -162,7 +176,6 @@ const App = () => {
   return (
     <div className="app">
       <h1 className="title">Gerenciador de Tarefas</h1>
-
       <table>
         <thead>
           <tr key="trHead" className="sub-title">
@@ -190,6 +203,34 @@ const App = () => {
                 </section>
               </span>
             </th>
+            {!matches ? <>
+              <th>
+                <span className="title-status">
+                  Incluído
+                  <section className="icon-svg tooltip icon">
+                    <img
+                      alt="Ordenação por data de inclusão"
+                      src={Icon_order}
+                      onClick={() => order("inclusion")}
+                    />
+                    <span className="tooltip-text">Ordenação</span>
+                  </section>
+                </span>
+              </th>
+              <th>
+                <span className="title-status">
+                  Alterado
+                  <section className="icon-svg tooltip icon">
+                    <img
+                      alt="Ordenação por data de alteração"
+                      src={Icon_order}
+                      onClick={() => order("change")}
+                    />
+                    <span className="tooltip-text">Ordenação</span>
+                  </section>
+                </span>
+              </th>
+            </> : null}
             <th colSpan={2} className="icon column-add">
               <section
                 className="icon-svg tooltip"
@@ -201,66 +242,70 @@ const App = () => {
             </th>
           </tr>
         </thead>
-        <tbody>
-          {!loading ? (
-            data.length > 0 ? (
-              data.map((task) => {
-                return (
-                  <tr key={task.id}>
-                    <td className="column-description">{task.name}</td>
-                    <td className="column-concluded">
-                      <section
-                        className="icon-svg icon"
-                        onClick={(e) => handleChangeStatus(e, task.id)}
-                      >
-                        {task.completed ? (
-                          <img
-                            alt="Alterar status da tarefa"
-                            src={Icon_checked}
-                          />
-                        ) : (
-                          <img
-                            alt="Alterar status da tarefa"
-                            src={Icon_unchecked}
-                          />
-                        )}
-                      </section>
-                    </td>
-                    <td className="column-actions icon">
-                      <section
-                        className="icon-svg tooltip"
-                        onClick={() =>
-                          handleEdit(task.id, task.name, task.completed)
-                        }
-                      >
-                        <img alt="Editar tarefa" src={Icon_edit} />
-                        <span className="tooltip-text">Editar</span>
-                      </section>
-                    </td>
-                    <td className="column-actions icon">
-                      <section
-                        className="icon-svg tooltip"
-                        onClick={(e) => handleDelete(e, task.id)}
-                      >
-                        <img alt="Excluir tarefa" src={Icon_delete} />
-                        <span className="tooltip-text">Excluir</span>
-                      </section>
-                    </td>
-                  </tr>
-                );
-              })
-            ) : !error ? (
-              <th colSpan={4} className="list-empty"> Sua listagem de tarefas está vazia </th>
+          {!loading && data.length > 0 && (
+              <tbody>
+                {data.map((task) => {
+                  return (
+                    <tr key={task.id}>
+                      <td className="column-description">{task.name}</td>
+                      <td className="column-concluded">
+                        <section
+                          className="icon-svg icon"
+                          onClick={(e) => handleChangeStatus(e, task.id)}
+                        >
+                          {task.completed ? (
+                            <img
+                              alt="Alterar status da tarefa"
+                              src={Icon_checked}
+                            />
+                          ) : (
+                            <img
+                              alt="Alterar status da tarefa"
+                              src={Icon_unchecked}
+                            />
+                          )}
+                        </section>
+                      </td>
+                      {!matches ? <>
+                        <td>{maskDate(task.inserted_at)}</td>
+                        <td>{maskDate(task.updated_at)}</td>
+                      </> : null}
+                      <td className="column-actions icon">
+                        <section
+                          className="icon-svg tooltip"
+                          onClick={() => 
+                            history.push(`/edicao/${task.id}`)
+                          }
+                        >
+                          <img alt="Editar tarefa" src={Icon_edit} />
+                          <span className="tooltip-text">Editar</span>
+                        </section>
+                      </td>
+                      <td className="column-actions icon">
+                        <section
+                          className="icon-svg tooltip"
+                          onClick={(e) => handleDelete(e, task.id)}
+                        >
+                          <img alt="Excluir tarefa" src={Icon_delete} />
+                          <span className="tooltip-text">Excluir</span>
+                        </section>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+          )}
+      </table>
+      {!loading && data.length === 0 && (
+       !error ? (
+              <div colSpan={4} className="list-empty"> Sua listagem de tarefas está vazia </div>
             ) : (
               <th colSpan={4} className="error-get-list"> Houve um erro na busca de informações. <br /> Tente novamente mais tarde ou entre em contato com o suporte</th>
             )
-          ) : (
-            <th colSpan={4}>
+            )}
+            {loading && <th colSpan={4}>
               <Loading />
-            </th>
-          )}
-        </tbody>
-      </table>
+            </th>}
 
       {anchorEl ? (
         <Popper
@@ -277,10 +322,6 @@ const App = () => {
           closeModal={(value) => setShowModal(value)} 
         />
       )}
-
-      <div>
-        <ToastContainer />
-      </div>
       </div>
   );
 };

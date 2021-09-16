@@ -1,0 +1,44 @@
+.edit {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0,0,0,0.8);
+  z-index: 2;
+  -webkit-transition: opacity 400ms ease-in;
+  -moz-transition: opacity 400ms ease-in;
+  transition: opacity 400ms ease-in;
+  color: #fff;
+}
+
+.edit > div {
+  width: 400px;
+  position: relative;
+  margin: 10% auto;
+  padding: 15px 20px;
+  border-radius: 16px;
+  background: gray;
+}
+
+.title-edit {
+  text-align: center;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.button-submit {
+  text-align: center;
+  margin-top: 32px;
+}
+
+.button-submit > input {
+  background-color: #7FFFD4;
+  border-color: #7FFFD4;
+  padding: 4px 8px;
+  border-radius: 13px;
+  font-weight: bold;
+}

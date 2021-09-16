@@ -7,13 +7,13 @@ import {
   Popper,
   Typography,
 } from "@material-ui/core";
-import "./index.css";
+import "./styles.css";
 
 const CustomPopper = ({ anchorEl, setAnchorEl, handleChange, id, title }) => {
   return (
     <Popper
       id={id.toString()}
-      open={anchorEl}
+      open={!!anchorEl}
       anchorEl={anchorEl}
       placement="left"
       className="popper"

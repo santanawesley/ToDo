@@ -1,19 +1,10 @@
 import React, { useState } from "react";
-import { api } from "../../main/api";
-import { ShowToast } from "../index";
 import './styles.css';
 
 const Modal = (props) => {
-  const { closeModal } = props;
+  const { closeModal, responseModal } = props;
 
   const [description, setDescription] = useState("");
-
-  const saveTask = async () => {
-    const responseSave = await api.registerTasks(description);
-    if(responseSave.ok === true) {
-      ShowToast("success", "Inclusão realizada com sucesso!");
-    }
-  };
 
   return (
     <div className="modal">
@@ -28,10 +19,11 @@ const Modal = (props) => {
             <input
               type="text"
               onChange={(e) => setDescription(e.target.value)}
+              autoFocus
             />
           </p>
           <p className="button-submit">
-            <input type="submit" value="SALVAR" onClick={() => saveTask()} />
+            <input type="submit" value="SALVAR" onClick={() => responseModal('yes', description)} />
           </p>
         </form>
       </div>

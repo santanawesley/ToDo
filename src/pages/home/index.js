@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from 'react-router';
 import { useMediaQuery, useTheme } from '@material-ui/core';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { dataList } from '../../redux/actions';
 import api from "../../main/api";
 import {
   Icon_add,
@@ -14,8 +17,9 @@ import { Loading, Modal, Popper, ShowToast } from "../../shared";
 import { maskDate } from '../../shared/masks';
 import "./styles.css";
 
-const App = () => {
+const App = (props) => {
   const history = useHistory();
+  const { dataList, dataToDo } = props;
 
   const [loading, setLoading] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -45,7 +49,7 @@ const App = () => {
       setLoading(true);
         try {
         const responseList = await api.listTasks();
-        setData(responseList);
+        dataList(responseList);
       } catch (e) {
         setError(true);
         ShowToast("error", "Algo aconteceu, tente novamente mais tarde!");
@@ -54,6 +58,10 @@ const App = () => {
       }
     })();
   }, []);
+
+  useEffect(() => {
+    setData(dataToDo.value);
+  }, [dataToDo]);
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popper" : undefined;
@@ -121,6 +129,17 @@ const App = () => {
       id: null,
     });
     setShowModal(true);
+  };
+
+  const responseModal = async (response, data) => {
+      if(response === 'yes') {
+        const responseSave = await api.registerTasks(data);
+        if(responseSave.ok === true) {
+          ShowToast("success", "Inclusão realizada com sucesso!");
+        }
+      } else {
+          return null;
+      }
   };
 
   const handleDelete = (event, taskId) => {
@@ -300,12 +319,12 @@ const App = () => {
        !error ? (
               <div colSpan={4} className="list-empty"> Sua listagem de tarefas está vazia </div>
             ) : (
-              <th colSpan={4} className="error-get-list"> Houve um erro na busca de informações. <br /> Tente novamente mais tarde ou entre em contato com o suporte</th>
+              <div colSpan={4} className="error-get-list"> Houve um erro na busca de informações. <br /> Tente novamente mais tarde ou entre em contato com o suporte</div>
             )
             )}
-            {loading && <th colSpan={4}>
+            {loading && <div colSpan={4}>
               <Loading />
-            </th>}
+            </div>}
 
       {anchorEl ? (
         <Popper
@@ -319,11 +338,19 @@ const App = () => {
       {showModal && (
         <Modal
           dataModal={dataModal}
-          closeModal={(value) => setShowModal(value)} 
+          closeModal={(value) => setShowModal(value)}
+          responseModal={responseModal}
         />
       )}
       </div>
   );
 };
 
-export default App;
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ dataList }, dispatch);
+
+const mapStateToProps = store => ({
+  dataToDo: store.dataList
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

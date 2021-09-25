@@ -35,6 +35,12 @@ tr:nth-child(even) {
   padding: 5px;
 }
 
+.selections {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .title-activity {
   display: flex;
   justify-content: space-between;

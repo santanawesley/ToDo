@@ -1,0 +1,40 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.filter {
+  display: flex;
+  padding-top: 32px;
+  padding-bottom: 32px;
+}
+
+.buttons {
+  display: flex;
+}
+
+@media screen and (max-width: 1199px) {
+  .filter {
+    display: block;
+  }
+  .buttons {
+    display: block;
+  }
+}
+
+.textField {
+  margin-left: 8px;
+  margin-right: 8px;
+  width: 200px;
+}
+
+.buttonAdd {
+  margin-top: 16px;
+  margin-left: 8px;
+  background-color: #045ead !important;
+  color: #fff !important;
+}
+
+.buttonAdd:hover {
+  background-color: #056cc6 !important;
+}

@@ -1,8 +1,8 @@
-import { combineReducers } from 'redux';
-import { DataList } from './dataList';
-import FilteredList from './filteredList';
+import { combineReducers } from "redux";
+import { InitialList } from "./initialList";
+import FilteredList from "./filteredList";
 
 export const Reducers = combineReducers({
-  dataList: DataList,
+  initialList: InitialList,
   filteredList: FilteredList,
 });

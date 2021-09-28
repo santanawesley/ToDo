@@ -1,34 +1,31 @@
-import React, { useEffect, useState } from 'react';
-import { addDays, isWithinInterval } from 'date-fns';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { TextField, Button } from '@material-ui/core';
+import React, { useEffect, useState } from "react";
+import { addDays, isWithinInterval } from "date-fns";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { TextField, Button } from "@material-ui/core";
 
-import { filteredList } from '../../redux/actions';
+import { filteredList } from "../../redux/actions";
 
-import './styles.css';
+import "./styles.css";
 
 const FilterData = (props) => {
-  const {
-  dataToDo,
-  filteredList,
-} = props;
+  const { readInitialList, filteredList } = props;
 
   const [selectedDate, setSelectedDate] = useState({
-    initialDate: '',
-    endDate: '',
+    initialDate: "",
+    endDate: "",
   });
-  const [initialData, setInitialData] = useState([])
+  const [initialData, setInitialData] = useState([]);
 
   useEffect(() => {
-    setInitialData(dataToDo);
-  }, [dataToDo]);
+    setInitialData(readInitialList);
+  }, [readInitialList]);
 
   const handleDateChange = (date, type) => {
-    if (type === 'initial') {
+    if (type === "initial") {
       setSelectedDate({ ...selectedDate, initialDate: date });
     }
-    if (type === 'end') {
+    if (type === "end") {
       setSelectedDate({ ...selectedDate, endDate: date });
     }
   };
@@ -39,7 +36,7 @@ const FilterData = (props) => {
   };
 
   const filterByDate = () => {
-    if(initialData) {
+    if (initialData) {
       const changedData = initialData.value.filter((plan) => {
         return isWithinInterval(new Date(plan.inserted_at), {
           start: new Date(selectedDate.initialDate),
@@ -51,7 +48,7 @@ const FilterData = (props) => {
   };
 
   const cleanFilter = () => {
-    setSelectedDate({ initialDate: '', endDate: '' });
+    setSelectedDate({ initialDate: "", endDate: "" });
     filteredList(initialData.value);
   };
 
@@ -64,13 +61,13 @@ const FilterData = (props) => {
           InputProps={{
             inputProps: {
               max: selectedDate.endDate,
-              style: { textTransform: 'uppercase' },
+              style: { textTransform: "uppercase" },
             },
           }}
           type="date"
           value={selectedDate.initialDate}
           className="textField"
-          onChange={(e) => handleDateChange(e.target.value, 'initial')}
+          onChange={(e) => handleDateChange(e.target.value, "initial")}
           InputLabelProps={{
             shrink: true,
           }}
@@ -83,19 +80,19 @@ const FilterData = (props) => {
           InputProps={{
             inputProps: {
               min: selectedDate.initialDate,
-              style: { textTransform: 'uppercase' },
+              style: { textTransform: "uppercase" },
             },
           }}
           type="date"
           value={selectedDate.endDate}
           className="textField"
-          onChange={(e) => handleDateChange(e.target.value, 'end')}
+          onChange={(e) => handleDateChange(e.target.value, "end")}
           InputLabelProps={{
             shrink: true,
           }}
         />
       </form>
-      <div className='buttons'>
+      <div className="buttons">
         <Button
           variant="contained"
           className="buttonAdd"
@@ -117,11 +114,11 @@ const FilterData = (props) => {
   );
 };
 
-const mapDispatchToProps = dispatch =>
+const mapDispatchToProps = (dispatch) =>
   bindActionCreators({ filteredList }, dispatch);
 
-const mapStateToProps = store => ({
-  dataToDo: store.dataList
+const mapStateToProps = (store) => ({
+  readInitialList: store.initialList,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FilterData);

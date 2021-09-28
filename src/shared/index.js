@@ -4,3 +4,4 @@ export { default as Popper } from "./popper";
 export { default as ShowToast } from "./toast";
 export { default as FilterData } from "./filterDate";
 export { default as Masks } from "./masks";
+export { default as Search } from "./search";

@@ -28,7 +28,6 @@ const masks = {
 
   maskCNPJ: (cnpj) => {
     let r = cnpj.replace(/\D/g, "");
-    // r = r.replace(/^0/, '');
     if (r.length > 12) {
       r = r.replace(
         /^(\d\d)(\d{0,3})(\d{0,3})(\d{0,4})(\d{0,2}).*/,

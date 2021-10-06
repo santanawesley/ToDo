@@ -1,2 +1,4 @@
-export const GET_LIST = 'GET_LIST';
-export const FILTERED_LIST = 'FILTERED_LIST';
+export const GET_LIST = "GET_LIST";
+export const DATE_FILTERED_LIST = "DATE_FILTERED_LIST";
+export const SEARCH_FILTERED_LIST = "SEARCH_FILTERED_LIST";
+export const FILTER_CALL = "FILTER_CALL";

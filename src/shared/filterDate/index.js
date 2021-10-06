@@ -4,22 +4,44 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { TextField, Button } from "@material-ui/core";
 
-import { filteredList } from "../../redux/actions";
+import {
+  dateFilteredList,
+  filterCall,
+} from "../../redux/actions";
 
 import "./styles.css";
 
 const FilterData = (props) => {
-  const { readInitialList, filteredList } = props;
-
+  const {
+    readInitialList,
+    dateFilteredList,
+    filterCall,
+    readyFilterCall,
+    searchFilteredList,
+  } = props;
+  const [initialData, setInitialData] = useState([]);
   const [selectedDate, setSelectedDate] = useState({
     initialDate: "",
     endDate: "",
   });
-  const [initialData, setInitialData] = useState([]);
 
   useEffect(() => {
     setInitialData(readInitialList);
   }, [readInitialList]);
+
+  useEffect(() => {
+    if (readyFilterCall.value === "search") {
+      if (selectedDate.initialDate && selectedDate.endDate) {
+        const changedData = searchFilteredList.value.filter((plan) => {
+          return isWithinInterval(new Date(plan.inserted_at), {
+            start: new Date(selectedDate.initialDate),
+            end: addDays(new Date(selectedDate.endDate), 1),
+          });
+        });
+        dateFilteredList(changedData);
+      }
+    }
+  }, [searchFilteredList]);
 
   const handleDateChange = (date, type) => {
     if (type === "initial") {
@@ -37,19 +59,20 @@ const FilterData = (props) => {
 
   const filterByDate = () => {
     if (initialData) {
+      filterCall("date");
       const changedData = initialData.value.filter((plan) => {
         return isWithinInterval(new Date(plan.inserted_at), {
           start: new Date(selectedDate.initialDate),
           end: addDays(new Date(selectedDate.endDate), 1),
         });
       });
-      filteredList(changedData);
+      dateFilteredList(changedData);
     }
   };
 
   const cleanFilter = () => {
     setSelectedDate({ initialDate: "", endDate: "" });
-    filteredList(initialData.value);
+    dateFilteredList(initialData.value);
   };
 
   return (
@@ -115,10 +138,15 @@ const FilterData = (props) => {
 };
 
 const mapDispatchToProps = (dispatch) =>
-  bindActionCreators({ filteredList }, dispatch);
+  bindActionCreators(
+    { dateFilteredList, filterCall },
+    dispatch
+  );
 
 const mapStateToProps = (store) => ({
   readInitialList: store.initialList,
+  searchFilteredList: store.searchFilteredList,
+  readyFilterCall: store.filterCall,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FilterData);

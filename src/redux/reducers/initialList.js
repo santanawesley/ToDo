@@ -12,11 +12,9 @@ const initialState = {
   ],
 };
 
-export const InitialList = (state = initialState, action) => {
-  console.log("aqui no Reducers DataList, action = ", action);
+const InitialList = (state = initialState, action) => {
   switch (action.type) {
     case GET_LIST:
-      console.log("abc");
       return {
         ...state,
         value: action.value,
@@ -25,3 +23,5 @@ export const InitialList = (state = initialState, action) => {
       return state;
   }
 };
+
+export default InitialList;

@@ -18,7 +18,7 @@ import "./styles.css";
 
 const App = (props) => {
   const history = useHistory();
-  const { initialList, readInitialList, filteredList } = props;
+  const { initialList, readInitialList, dateFilteredList, searchFilteredList } = props;
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -69,8 +69,12 @@ const App = (props) => {
   }, [readInitialList]);
 
   useEffect(() => {
-    setData(filteredList.value)
-  }, [filteredList]);
+    setData(dateFilteredList.value);
+  }, [dateFilteredList]);
+
+  useEffect(() => {
+    setData(searchFilteredList.value);
+  }, [searchFilteredList]);
 
   const handleAction = async () => {
     setAnchorEl(null);
@@ -363,7 +367,8 @@ const mapDispatchToProps = dispatch =>
 
 const mapStateToProps = store => ({
   readInitialList: store.initialList,
-  filteredList: store.filteredList,
+  dateFilteredList: store.dateFilteredList,
+  searchFilteredList: store.searchFilteredList,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

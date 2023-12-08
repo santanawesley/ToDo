@@ -3,7 +3,7 @@ import { format } from "date-fns";
 
 const masks = {
   maskDate: (date) => {
-    return format(new Date(date), "dd/MM/yyyy");
+    if (date) return format(new Date(date), "dd/MM/yyyy");
   },
 
   currencyFormatter: (value) => {
